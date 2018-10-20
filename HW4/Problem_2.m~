@@ -13,7 +13,7 @@ x0 = [1 0];
 options = odeset('RelTol', 1.0E-08, 'AbsTol', 1.0E-08);
 u = [0:0.1:10]; % input
 
-for i = 1:length(u)
+for i = 1:length(w)
     [tout, yout{i}] = ode45(@inv_pend, tspan, x0, options, u(i)); 
     
 end
@@ -21,10 +21,10 @@ end
 
 %% Plot the graph
 subplot(131)
-plot(tout, yout{18}); 
+plot(tout, yout{1}); 
 
 subplot(132)
-plot(tout, yout{19}); 
+plot(tout, yout{10}); 
 
 subplot(133)
 plot(tout, yout{20}); 
