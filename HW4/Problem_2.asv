@@ -9,17 +9,20 @@ clc
 %% Soluton
 tspan = [0:0.1:150]; 
 x0 = [1 0]; 
-%u = [0:0.1: 10]; % input
+u = [0:0.1: 10]; % input
 options = odeset('RelTol', 1.0E-08, 'AbsTol', 1.0E-08);
-w = [0:0.1:10]; % input
 
-for i = 1:length(w)
-    [tout{i}, yout{i}] = ode45(@inv_pend, tspan, x0, options, w(i)); 
-
+for i = 1:length(u)
+    [tout, yout{i}] = ode45(@inv_pend, tspan, x0, options, u(i)); 
+    RMS(i)=sqrt(sum(sum(yout{i}.^2))/length(u));
 end
 
-subplot(121)
-plot(tout{1}, yout(:, 1)); 
+%% Plot the graph
+subplot(131)
+plot(u, RMS); 
 
-subplot(122)
-plot(tout, yout(:, 2)); 
+subplot(132)
+plot(tout, yout{19}); 
+
+subplot(133)
+plot(tout, yout{20}); 
