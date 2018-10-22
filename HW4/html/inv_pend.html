@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Linear Control Systems</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-10-22"><meta name="DC.source" content="Problem_2.m"><style type="text/css">
+      --><title>Linear Control Systems</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-10-22"><meta name="DC.source" content="inv_pend.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,55 +66,31 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Linear Control Systems</h1><!--introduction--><div><ul><li>Homework 4</li><li>Problem 2</li><li>Arthor: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Housekeeping</a></li><li><a href="#2">Soluton</a></li><li><a href="#3">Plot the graph</a></li></ul></div><h2 id="1">Housekeeping</h2><pre class="codeinput">clear <span class="string">all</span>
-clc
-</pre><h2 id="2">Soluton</h2><pre class="codeinput">tspan = [0:0.1:150];
-x0 = eye(2);
-u = [0:0.1:10]; <span class="comment">% input</span>
-options = odeset(<span class="string">'RelTol'</span>, 1.0E-08, <span class="string">'AbsTol'</span>, 1.0E-08);
+  </style></head><body><div class="content"><h1>Linear Control Systems</h1><!--introduction--><div><ul><li>Homework 4</li><li>Problem 2</li><li>Arthor: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Solution</a></li></ul></div><h2 id="1">Solution</h2><pre class="codeinput"><span class="keyword">function</span> xdot = inv_pend(t, x, u)
+w = u;
 
-<span class="keyword">for</span> i = 1:length(u)
-    [tout, yout{i}] = ode45(@inv_pend, tspan, x0(:), options, u(i));
-<span class="keyword">end</span>
-</pre><h2 id="3">Plot the graph</h2><pre class="codeinput">omega_1 = [19 21 23];
-figure
-<span class="keyword">for</span> i = 1:3
-    subplot(3, 1, i)
-    plot(tout, yout{omega_1(i)});
-    ylabel(<span class="string">'Amplitude'</span>)
-    xlabel(<span class="string">'Time (sec)'</span>)
-    title([<span class="string">'X(t) vs t when \omega = '</span>, num2str(omega_1(i)/10-0.1)])
-<span class="keyword">end</span>
-</pre><img vspace="5" hspace="5" src="Problem_2_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+xdot_1 = x(2);
+xdot_2 = -(1+0.5*sin(u*t))*x(1)-0.2*x(2);
+xdot_3 = x(4);
+xdot_4 = -(1+0.5*sin(u*t))*x(3)-0.2*x(4);
+
+xdot = [xdot_1; xdot_2; xdot_3; xdot_4];
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Linear Control Systems
 % * Homework 4 
 % * Problem 2
 % *  Arthor: Xinyi Cai
-%% Housekeeping
-clear all
-clc
 
-%% Soluton
-tspan = [0:0.1:150]; 
-x0 = eye(2); 
-u = [0:0.1:10]; % input
-options = odeset('RelTol', 1.0E-08, 'AbsTol', 1.0E-08);
+%% Solution
+function xdot = inv_pend(t, x, u)
+w = u;
 
-for i = 1:length(u)
-    [tout, yout{i}] = ode45(@inv_pend, tspan, x0(:), options, u(i)); 
-end
+xdot_1 = x(2); 
+xdot_2 = -(1+0.5*sin(u*t))*x(1)-0.2*x(2); 
+xdot_3 = x(4); 
+xdot_4 = -(1+0.5*sin(u*t))*x(3)-0.2*x(4); 
 
-%% Plot the graph
-
-omega_1 = [19 21 23];
-figure
-for i = 1:3
-    subplot(3, 1, i)
-    plot(tout, yout{omega_1(i)});
-    ylabel('Amplitude')
-    xlabel('Time (sec)')
-    title(['X(t) vs t when \omega = ', num2str(omega_1(i)/10-0.1)])
-end
+xdot = [xdot_1; xdot_2; xdot_3; xdot_4];
 ##### SOURCE END #####
 --></body></html>

@@ -24,7 +24,7 @@ Bh_c = V_c'*B;
 [Ah_c Bh_c]
 
 %% Observability
-Q = [A; C*A; C.^2*A; C.^3*A]; 
+Q = obsv(A, C); 
 rank_Q = rank(Q); 
 disp(['The rank of Q matrix = ', num2str(rank_Q)])
 [V_o, R_o] = qr(Q'); 

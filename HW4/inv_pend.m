@@ -1,11 +1,15 @@
-function xdot = inv_pend(t, x, u)
+%% Linear Control Systems
+% * Homework 4 
+% * Problem 2
+% *  Arthor: Xinyi Cai
 
-w_n = 1; 
-zeta = 0.1; 
+%% Solution
+function xdot = inv_pend(t, x, u)
 w = u;
 
-A = [0 1;...
-    -w_n.^2*(1+0.5*sin(u*t)) -2*zeta*w_n]; 
-x = [x(1); x(2)];
+xdot_1 = x(2); 
+xdot_2 = -(1+0.5*sin(u*t))*x(1)-0.2*x(2); 
+xdot_3 = x(4); 
+xdot_4 = -(1+0.5*sin(u*t))*x(3)-0.2*x(4); 
 
-xdot = A*x;
+xdot = [xdot_1; xdot_2; xdot_3; xdot_4];
