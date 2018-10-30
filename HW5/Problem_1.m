@@ -18,8 +18,8 @@ vd = 1;
 
 %% Part b
 poles = [-1; -1+1j; -1-1j]; 
-K = acker(A, B, poles);
-r = -inv(C(3, :)*inv(A-B*K)*B)*vd; 
+K = acker(A, B, poles)
+r = -inv(C(3, :)*inv(A-B*K)*B)*vd
 
 %% Part c
 sys = ss(A-B*K, B*r, C, D); 
