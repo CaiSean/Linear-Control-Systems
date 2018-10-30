@@ -1,6 +1,6 @@
 %% Linear Control Systems Homework 5
-% Problem 3
-% Arthor: Xinyi Cai
+% * Problem 3
+% * Arthor: Xinyi Cai
 
 %% Housekeeping
 clc; 
@@ -18,8 +18,8 @@ poles = [-10; -20; 10*(-1+1j); 10*(-1-1j)];
 yd = [0.1; 0.2]; 
 
 %% State Feedback Controller
-K = place(A, B, poles); 
-r = -inv(C*inv(A-B*K)*B)*yd; 
+K = place(A, B, poles)
+r = -inv(C*inv(A-B*K)*B)*yd
 sys = ss(A-B*K, B*r, C, D); 
 
 step(sys)
