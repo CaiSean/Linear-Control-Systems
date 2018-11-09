@@ -18,7 +18,7 @@ D = 0;
 K = [3*w 3*w^2 2*w^3]*inv([B, A*B, A^2*B]*[1 0 w^2; 0 1 0; 0 0 1]); 
 
 syms s
-CLTF = C*inv(s*eye(3)-(A-B*K))*B;
+CLTF = C*inv(s*eye(3)-(A-B*K))*B
 
 %% Part b
 syms t
@@ -31,7 +31,7 @@ r_TF_ = ilaplace(CLTF_yd, s)
 
 %% Part c
 Q = [C; C*A; C*A^2]; 
-L = inv([1 0 0; 0 1 0; w^2 0 1]*Q)*[30*w; 399*w^2; 2000*w^3];
+L = inv([1 0 0; 0 1 0; w^2 0 1]*Q)*[30*w; 399*w^2; 2000*w^3]
 
 %% Part e
 syms w
