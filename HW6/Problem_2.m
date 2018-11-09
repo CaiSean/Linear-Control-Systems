@@ -25,9 +25,9 @@ syms t
 yd = 1-cos(w*t); 
 Yd = laplace(yd);
 
-CLTF_yd = 2*(s^3+3*w*s^2+4*w^2*s+2*w^3)/(s^3+w^2*s);
+R = 2*(s^3+3*w*s^2+4*w^2*s+2*w^3)/(s^3+w^2*s);
 
-r_TF_ = ilaplace(CLTF_yd, s)
+r = ilaplace(R, s)
 
 %% Part c
 Q = [C; C*A; C*A^2]; 

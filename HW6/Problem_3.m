@@ -12,9 +12,8 @@ B = [0; -25; 0; 10];
 C = [40 0 0 0; 0 0 10 0; 0 0 0 -5]; 
 D = zeros(3, 1);
 
-plant = ss(A, B, C, D);
-
 %% State Feedback Control Gain
+plant = ss(A, B, C, D);
 poles_sys = pole(plant);
 poles_c = [-15; -30; poles_sys(3:4)]';
 K = place(A, B, poles_c);
@@ -23,7 +22,6 @@ K = place(A, B, poles_c);
 poles_o = 10*poles_c; 
 L = place(A', C', poles_o)';
 
-%% Simulation
 A_11 = A;
 A_12 = -B*K; 
 A_21 = L*C; 
@@ -37,16 +35,17 @@ D_bar = zeros(8, 1);
 sys_full = ss(A_bar, B_bar, C_bar, D_bar);
 t = 0:0.001:1; 
 x0 = [zeros(4,1); ones(4, 1)];
-u = 1+0*t;
+u = ones(1, length(t));
 y = lsim(sys_full, u, t, x0);
 
 %% Plot data
-for i = 1:length(C_bar)/2
+figure
+for i = 1:4
     subplot(2, 2, i); hold on; grid on
     plot(t, y(:, i))
     plot(t, y(:, i+4))
-    legend(['Plant:', '$\dot{x}$', num2str(i)], ['Observer: ', '$\hat{x}$', num2str(i)],...
-        'Interpreter','latex')
+    legend(['Plant: ', 'x ', num2str(i)],...
+        ['Observer: ', 'x hat ', num2str(i)])
     title('Full Order Observer')
     hold off
 end
@@ -63,7 +62,7 @@ B2_r = B(4);
 K1_r = K(1:3); 
 K2_r = K(4); 
 
-Lr = [1 1 1]; 
+Lr = place(A22_r', A12_r', -5)'
 Ar = A22_r-Lr*A12_r;
 Bu = B2_r-Lr*B1_r;
 By = Ar*Lr-A21_r-Lr*A11_r;
@@ -71,18 +70,33 @@ By = Ar*Lr-A21_r-Lr*A11_r;
 A_11 = A-B*K1_r*C-K2_r*B*Lr*C;
 A_12 = -B*K2_r;
 A_21 = -Bu*K1_r*C-Bu*K2_r*Lr*C+By*C;
-A_22 = Ar-Bu*K2_r;
+A_22 = Ar-Bu*K2_r; 
 
-A_bar = [A_11 A_12; A_21 A_22]
-B_bar = [B; Bu]
-C_bar = [eye(4), zeros(4, 1); eye(4), zeros(4, 1)];
-D_bar = zeros(8, 1)
+A_bar = [A_11 A_12; A_21 A_22];
+B_bar = [B; Bu];
+C_bar = eye(5); 
+D_bar = zeros(5, 1);
 
 sys_reduced = ss(A_bar, B_bar, C_bar, D_bar);
-t = 0:0.01:0.5; 
 x0 = [zeros(4,1); 1];
-u = 1+0*t;
-y = lsim(sys_reduced, u, t, x0);
+t = 0:0.01:15;
+u = ones(1, length(t));
+y = lsim(sys_reduced, u, t, x0); 
+
+%% Plot data
+figure
+for i = 1:4
+    subplot(2, 2, i); hold on; grid on
+    plot(t, y(:, i))
+    if i == 4
+        plot(t, y(:, i+1))
+    end
+    legend(['Plant: ', 'x ', num2str(i)],...
+        ['Observer: ', 'x hat ', num2str(i)],...
+        'Location', 'southeast')
+    title('Reduced Order Observer')
+    hold off
+end
 
 %% Part b
 C1 = C(1, :); 
@@ -96,8 +110,3 @@ Q3 = [C3; C3*A; C3*A^2; C3*A^3];
 y1_rank = rank(Q1)
 y2_rank = rank(Q2)
 y3_rank = rank(Q3)
-
-
-
-
-
