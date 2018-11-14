@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Linear Control Systems Homework 7</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-13"><meta name="DC.source" content="Problem_2.m"><style type="text/css">
+      --><title>Linear Control Systems Homework 7</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-14"><meta name="DC.source" content="Problem_2.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,15 +66,37 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Linear Control Systems Homework 7</h1><!--introduction--><div><ul><li>Problem 2</li><li>Author: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Housekeeping</a></li><li><a href="#2">Solution</a></li></ul></div><h2 id="1">Housekeeping</h2><pre class="codeinput">clear <span class="string">all</span>
+  </style></head><body><div class="content"><h1>Linear Control Systems Homework 7</h1><!--introduction--><div><ul><li>Problem 2</li><li>Author: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Housekeeping</a></li><li><a href="#2">Solution (The easy way)</a></li><li><a href="#3">Solution (The hard way)</a></li></ul></div><h2 id="1">Housekeeping</h2><pre class="codeinput">clear <span class="string">all</span>
 clc
-</pre><h2 id="2">Solution</h2><pre class="codeinput">syms <span class="string">s</span>
+</pre><h2 id="2">Solution (The easy way)</h2><pre class="codeinput">syms <span class="string">s</span>
 Hs = tf([1 2], [1 2 5]);
 Hs_ = tf([-1 2], [1 -2 5]);
 
 sys = Hs*Hs_;
 rlocus(sys)
-</pre><img vspace="5" hspace="5" src="Problem_2_01.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="Problem_2_01.png" alt=""> <h2 id="3">Solution (The hard way)</h2><pre class="codeinput">[A, B, C, D] = tf2ss([1 2], [1 2 5]);
+Q = [1 0; 0 0];
+R = 0.0001:0.0001:1;
+
+<span class="keyword">for</span> i = 1:length(R)
+    [K, P, E] = lqr(A, B, Q, R(i));
+    roots(i, :) = (eig(A-B*K))';
+<span class="keyword">end</span>
+
+real_num = real(roots(:, 1));
+img_num_1 = imag(roots(:, 1));
+img_num_2 = -img_num_1;
+
+
+figure; hold <span class="string">on</span>
+plot(real_num, img_num_1)
+plot(real_num, img_num_2)
+plot(-real_num, img_num_1)
+plot(-real_num, img_num_2)
+xlim([-8 8])
+ylim([-2.5 2.5])
+grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="Problem_2_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Linear Control Systems Homework 7
 % * Problem 2
@@ -84,12 +106,38 @@ rlocus(sys)
 clear all
 clc
 
-%% Solution
+%% Solution (The easy way)
 syms s
 Hs = tf([1 2], [1 2 5]); 
 Hs_ = tf([-1 2], [1 -2 5]); 
 
 sys = Hs*Hs_; 
 rlocus(sys)
+
+%% Solution (The hard way)
+
+[A, B, C, D] = tf2ss([1 2], [1 2 5]); 
+Q = [1 0; 0 0]; 
+R = 0.0001:0.0001:1; 
+
+for i = 1:length(R)
+    [K, P, E] = lqr(A, B, Q, R(i)); 
+    roots(i, :) = (eig(A-B*K))'; 
+end
+
+real_num = real(roots(:, 1));
+img_num_1 = imag(roots(:, 1)); 
+img_num_2 = -img_num_1; 
+
+
+figure; hold on
+plot(real_num, img_num_1)
+plot(real_num, img_num_2)
+plot(-real_num, img_num_1)
+plot(-real_num, img_num_2)
+xlim([-8 8])
+ylim([-2.5 2.5])
+grid on
+
 ##### SOURCE END #####
 --></body></html>
